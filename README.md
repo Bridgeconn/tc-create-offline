@@ -189,7 +189,7 @@ module.exports = {
 Set watch script for compiling and watching changes in our files
 (it’s placed below the “start” script in package.json)
 ```
-"watch": “webpack --config webpack.common.js --watch"
+"watch": "webpack --config webpack.common.js --watch"
 ```
 
 restart the app if it’s running
