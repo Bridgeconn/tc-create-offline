@@ -6,7 +6,7 @@
 
 npm commands :
 ```
-mkdir my-electron-app && cd my-electron-app
+mkdir tc-create-offline-poc && cd tc-create-offline-poc
 npm init
 ```
 
@@ -189,7 +189,7 @@ module.exports = {
 Set watch script for compiling and watching changes in our files
 (it’s placed below the “start” script in package.json)
 ```
-"watch": “webpack --config webpack.common.js --watch"
+"watch": "webpack --config webpack.common.js --watch"
 ```
 
 restart the app if it’s running
@@ -273,11 +273,38 @@ app.on('activate', () => {
   }
 })
 
-
 // Chromium -> web eingine for rendering the UI, full Chrome-like web browser
 // V8 -> engine that provides capabilities to execute, run, JS code in the browser
 // Node JS(V8) -> we are able to run JS code + provides more features
 
 // Webpack -> is a module builder, main purpose is to bundle JS files for usage in the browsert
 // Babel -> js a JS compiler
+```
+
+
+### Others
+create a App.js file inside src folder
+```
+import React from "react";
+
+React
+const App = () => {
+    return ( 
+        <div>
+            <h1>tC create Offline app</h1>
+        </div>
+     );
+}
+ 
+export default App;
+```
+
+### to run the app
+In one terminal run below code
+```
+npm run watch
+```
+Open new terminal and run 
+```
+npm start
 ```
