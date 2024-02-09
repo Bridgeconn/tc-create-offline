@@ -6,7 +6,7 @@
 
 npm commands :
 ```
-mkdir my-electron-app && cd my-electron-app
+mkdir tc-create-offline-poc && cd tc-create-offline-poc
 npm init
 ```
 
