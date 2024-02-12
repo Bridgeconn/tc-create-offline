@@ -52,7 +52,7 @@ const {...} = require("electronite");
 main.js
 ```
 // Main Process
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow } = require('electronite');
 
 function createWindow() {
   // Browser Window <- Renderer Process
@@ -226,7 +226,7 @@ npm install –save-dev electron-reload
 (update) main.js
 ```javascript
 // Main Process
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow } = require('electronite');
 //adding the following for reload
 const path = require('path');
 const isDev = !app.isPackaged;
@@ -297,6 +297,10 @@ const App = () => {
 }
  
 export default App;
+```
+### install npm package
+```
+npm install --legacy-peer-deps
 ```
 
 ### to run the app

@@ -1,0 +1,12 @@
+projects:
+- identifier: 'obs-tq'
+  version: '7'
+  media:
+  - identifier: 'pdf'
+    version: '7'
+    contributor: []
+    url: 'https://cdn.door43.org/en/Door43-Catalog/en_obs-tq/v7/pdf/en_obs-tq_v7.pdf'
+  - identifier: 'door43'
+    version: '{latest}'
+    contributor: []
+    url: 'https://door43.org/u/Door43-Catalog/en_obs-tq/'
