@@ -26,7 +26,7 @@ const styles = (theme) => ({
 
 const DialogTitle = withStyles(styles)((props) => {
   const { children, classes, onClose, ...other } = props;
-  
+
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
       <Typography variant="h6">{children}</Typography>
@@ -52,45 +52,44 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-export default function PrintPreview({filePath,fileName}) {
+export default function PrintPreview({ filePath, fileName, fileType, translationContent }) {
   const [open, setOpen] = React.useState(false);
-  const[previewData,setPreviewData]=React.useState("")
-// Importing the necessary modules
-const Papa = require('papaparse');
-const columnName = 'Note';
-// Function to read a specific column from a TSV file
-function readColumn(filePath, columnName, callback) {
-  // Fetch the TSV file
-  fetch(filePath)
-    .then(response => response.text())
-    .then(data => {
-      // Parse the TSV content using PapaParse
+  const [previewData, setPreviewData] = React.useState("")
+  // Importing the necessary modules
+  const Papa = require('papaparse');
+  const columnName = 'Note';
+  // Function to read a specific column from a TSV file
+  function readColumn(filePath, columnName, callback) {
+    // Fetch the TSV file
+    fetch(filePath)
+      .then(response => response.text())
+      .then(data => {
+        // Parse the TSV content using PapaParse
 
-      Papa.parse(data, {
-        delimiter: '\t', // Set the delimiter to tab for TSV files
-        header: false,    // Treat the first row as headers
-        dynamicTyping: true, // Automatically convert values to appropriate types
-        complete: function(results) {
-          const columnValues = results.data.map(row =>
-            {if(row[6]!==undefined)
-            {return `**${fileName} ${row[0]}**\n\n ${row[6]}`}
+        Papa.parse(data, {
+          delimiter: '\t', // Set the delimiter to tab for TSV files
+          header: false,    // Treat the first row as headers
+          dynamicTyping: true, // Automatically convert values to appropriate types
+          complete: function (results) {
+            const columnValues = results.data.map(row => {
+              if (row[6] !== undefined) { return `**${fileName} ${row[0]}**\n\n ${row[6]}` }
+            });
+            callback(columnValues);
+          },
         });
-          callback(columnValues);
-        },
+      })
+      .catch(error => {
+        console.error('Error reading file:', error);
       });
-    })
-    .catch(error => {
-      console.error('Error reading file:', error);
-    });
-}
+  }
 
 
-readColumn(filePath, columnName, function(columnValues) {
-  columnValues.shift()
-  let values=columnValues
-  let p = values.join('\n\n')
-  setPreviewData(p)
-});
+  readColumn(filePath, columnName, function (columnValues) {
+    columnValues.shift()
+    let values = columnValues
+    let p = values.join('\n\n')
+    setPreviewData(p)
+  });
 
 
   const handleClickOpen = () => {
@@ -101,12 +100,14 @@ readColumn(filePath, columnName, function(columnValues) {
   };
 
   const componentRef = useRef();
+
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    
+
   });
 
-  
+  console.log("mmmmmmmmmmmmmmmmmmm", fileType)
+
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
@@ -117,14 +118,16 @@ readColumn(filePath, columnName, function(columnValues) {
           Preview
         </DialogTitle>
         <DialogContent dividers>
-        
-        <div style={{}}>
-    <div className="note"  ref={componentRef} style={{margin: 90,textAlign:'justify'}}> 
-    
-    <ReactMarkdown>{previewData.replace(/\\n/g, '\n')}</ReactMarkdown>
-    </div>
-    </div>
- 
+
+          <div style={{}}>
+            <div className="note" ref={componentRef} style={{ margin: 90, textAlign: 'justify' }}>
+              {fileType === 'tsv' ?
+               <ReactMarkdown>{previewData.replace(/\\n/g, '\n')}</ReactMarkdown> :
+               <ReactMarkdown>{translationContent}</ReactMarkdown>
+               }
+            </div>
+          </div>
+
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handlePrint} color="primary">

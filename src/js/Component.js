@@ -7,7 +7,7 @@ var fs = require('fs');
 
 
 
-export default function Component({sourceData,targetData,fileName,resource,filePath}) {
+export default function Component({sourceData,targetData,fileName,resource,filePath, fileType}) {
   const [sourceFile, setSourceFile] = React.useState("");
   const [savedFile, setSavedFile] = React.useState('');
   const [res,setRes]=React.useState("");
@@ -170,10 +170,13 @@ export default function Component({sourceData,targetData,fileName,resource,fileP
     <>
    
    {
-   <PrintPreview filePath={filePath} fileName={fileName} />
+    <div style={{float:'right', marginBottom:'10px'}}>
+
+   <PrintPreview filePath={filePath} fileName={fileName} fileType={fileType} />
+    </div>
    }
    <br/>
-
+   
     <DataTable
     sourceFile={sourceFile}
     targetFile={savedFile}
