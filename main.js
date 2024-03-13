@@ -9,8 +9,8 @@ require('@electron/remote/main').initialize()
     const win = new BrowserWindow({
       width: 1200,
       height: 1000,
-      minWidth:800,
-      minHeight:700,
+      //minWidth:800,
+      //minHeight:700,
 
      // backgroundColor: "white",
       webPreferences: {
