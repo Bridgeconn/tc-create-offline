@@ -1,4 +1,4 @@
-import React,{useEffect, useRef} from "react";
+import React, { useEffect, useRef } from "react";
 import { Typography } from "@material-ui/core";
 import { DataTable } from "datatable-translatable";
 import * as parser from 'uw-tsv-parser';
@@ -7,48 +7,31 @@ var fs = require('fs');
 
 
 
-export default function Component({sourceData,targetData,fileName,resource,filePath, fileType}) {
+export default function Component({ sourceData, targetData, fileName, resource, filePath, fileType, onSaveEdited }) {
   const [sourceFile, setSourceFile] = React.useState("");
   const [savedFile, setSavedFile] = React.useState('');
-  const [res,setRes]=React.useState("");
+  const [res, setRes] = React.useState("");
 
 
-  useEffect(()=>{
-  setSourceFile(sourceData)
-  setSavedFile(targetData)
-  setRes(resource) 
-  },[resource,targetData,sourceData,filePath])
+  useEffect(() => {
+    setSourceFile(sourceData)
+    setSavedFile(targetData)
+    setRes(resource)
+  }, [resource, sourceData, filePath])
 
 
-//   document.getElementById('save-changes').addEventListener('click',function(){
 
-//                 var actualFilePath = document.getElementById("actual-file").value;
-
-//                 if(actualFilePath){
-//                     saveChanges(actualFilePath,document.getElementById('content-editor').value);
-//                 }else{
-//                     alert("Please select a file first");
-//                 }
-//             },false);
-
-// function saveChanges(filepath,content){
-//   fs.writeFile(filepath, content, function (err) {
-//       if(err){
-//           alert("An error ocurred updating the file"+ err.message);
-//           console.log(err);
-//           return;
-//       }
-
-//       alert("The file has been successfully saved");
-//   });
-// }
-
-  useEffect(()=>{
+  useEffect(() => {
     // setSavedFile("");
     // setSourceFile("")
     setSourceFile(sourceData)
     setSavedFile(targetData)
-  },[sourceData,fileName])
+  }, [sourceData, fileName])
+
+
+  useEffect(() => {
+    onSaveEdited(savedFile)
+  }, [savedFile])
 
   //Uncomment this to test a page change from a new source file
   // setTimeout(() => {
@@ -86,7 +69,7 @@ export default function Component({sourceData,targetData,fileName,resource,fileP
   // Column headers for 7 column format:
   // Reference, ID, Tags, SupportReference, Quote, Occurrence, and Annotation.
 
-  const config = (res==="en_tn"?{
+  const config = (res === "en_tn" ? {
     compositeKeyIndices: [0, 1],
     columnsFilter: ["Reference", "ID", "Tags"],
     columnsShowDefault: [
@@ -96,14 +79,14 @@ export default function Component({sourceData,targetData,fileName,resource,fileP
       // "Note",
     ],
     rowHeader,
-  }:{
+  } : {
     compositeKeyIndices: [0, 1],
     columnsFilter: ["Reference", "ID", "Tags"],
     columnsShowDefault: [
-     // "SupportReference",
+      // "SupportReference",
       "Quote",
       "Occurrence",
-     // "Annotation",
+      // "Annotation",
       "Question",
       "Answer",
     ],
@@ -112,43 +95,46 @@ export default function Component({sourceData,targetData,fileName,resource,fileP
 
 
   const onSave = (_savedFile) => {
-// const notification=New Notification({Title: "File Saved",body:'Successfully'});
-//const notification = new Notification({title: 'File', body: 'Saved'});
-    if(resource==='en_tq'){
-    let filepath=filePath.includes("Resources/")?filePath.replace(`Resources/${resource}-release_v77`,"Output"):filePath
-    console.log(resource , filePath)
+    // const notification=New Notification({Title: "File Saved",body:'Successfully'});
+    //const notification = new Notification({title: 'File', body: 'Saved'});
+    setSavedFile(_savedFile);
+
+    // if (resource === 'en_tq') {
+    //   let filepath = filePath.includes("Resources/") ? filePath.replace(`Resources/${resource}-release_v77`, "Output") : filePath
+    //   console.log(resource, filePath)
 
 
-    fs.writeFile(filepath, _savedFile, function (err) {
-      if(err){
-          alert("An error ocurred updating the file"+ err.message);
-          console.log(err);
-          return;
-      }
-      alert("The file has been successfully saved");
-      setSavedFile(_savedFile);
-      //preventDefault()
+    //   fs.writeFile(filepath, _savedFile, function (err) {
+    //     if (err) {
+    //       alert("An error ocurred updating the file" + err.message);
+    //       console.log(err);
+    //       return;
+    //     }
+    //     alert("The file has been successfully saved");
+    //     setSavedFile(_savedFile);
+    //     //preventDefault()
 
-  }); }
-  else if(resource==='en_tn') {
+    //   });
+    // }
+    // else if (resource === 'en_tn') {
 
-    let filepath=filePath.includes("Resources/")?filePath.replace(`Resources/${resource}-release_v77`,"Output"):filePath
+    //   let filepath = filePath.includes("Resources/") ? filePath.replace(`Resources/${resource}-release_v77`, "Output") : filePath
 
-    console.log(resource , filePath)
+    //   console.log(resource, filePath)
 
-    fs.writeFile(filepath, _savedFile, function (err) {
-      if(err){
-          alert("An error ocurred updating the file"+ err.message);
-          console.log(err);
-          return;
-      }
-      alert("The file has been successfully saved");
-      setSavedFile(_savedFile);
-      //preventDefault()
+    //   fs.writeFile(filepath, _savedFile, function (err) {
+    //     if (err) {
+    //       alert("An error ocurred updating the file" + err.message);
+    //       console.log(err);
+    //       return;
+    //     }
+    //     alert("The file has been successfully saved");
+    //     setSavedFile(_savedFile);
+    //     //preventDefault()
 
-  });
+    //   });
 
-  }
+    // }
 
   };
 
@@ -168,26 +154,17 @@ export default function Component({sourceData,targetData,fileName,resource,fileP
   return (
 
     <>
-   
-   {
-    <div style={{float:'right', marginBottom:'10px'}}>
-
-   <PrintPreview filePath={filePath} fileName={fileName} fileType={fileType} />
-    </div>
-   }
-   <br/>
-   
-    <DataTable
-    sourceFile={sourceFile}
-    targetFile={savedFile}
-    onSave={onSave}
-    onValidate={onValidate}
-    parser={parser}
-    delimiters={delimiters}
-    config={config}
-    options={options}
-    generateRowId={generateRowId}
-  />
-  </>
+      <DataTable
+        sourceFile={sourceFile}
+        targetFile={savedFile}
+        onSave={onSave}
+        onValidate={onValidate}
+        parser={parser}
+        delimiters={delimiters}
+        config={config}
+        options={options}
+        generateRowId={generateRowId}
+      />
+    </>
   );
 }

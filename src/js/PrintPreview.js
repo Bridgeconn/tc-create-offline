@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
+import {Button} from '@mui/material';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
@@ -52,7 +53,7 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-export default function PrintPreview({ filePath, fileName, fileType, translationContent }) {
+export default function PrintPreview({ filePath, fileName, fileType, targetData }) {
   const [open, setOpen] = React.useState(false);
   const [previewData, setPreviewData] = React.useState("")
   // Importing the necessary modules
@@ -110,8 +111,8 @@ export default function PrintPreview({ filePath, fileName, fileType, translation
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Print / Preview
+      <Button variant="contained" size='small' color="primary" onClick={handleClickOpen}>
+        Print
       </Button>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} maxWidth={'lg'}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
@@ -123,7 +124,7 @@ export default function PrintPreview({ filePath, fileName, fileType, translation
             <div className="note" ref={componentRef} style={{ margin: 90, textAlign: 'justify' }}>
               {fileType === 'tsv' ?
                <ReactMarkdown>{previewData.replace(/\\n/g, '\n')}</ReactMarkdown> :
-               <ReactMarkdown>{translationContent}</ReactMarkdown>
+               <ReactMarkdown>{targetData}</ReactMarkdown>
                }
             </div>
           </div>
