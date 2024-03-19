@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react";
 import { Typography } from "@material-ui/core";
 import { DataTable } from "datatable-translatable";
 import * as parser from 'uw-tsv-parser';
-import PrintPreview from "./PrintPreview";
 var fs = require('fs');
 
 
@@ -22,8 +21,6 @@ export default function Component({ sourceData, targetData, fileName, resource, 
 
 
   useEffect(() => {
-    // setSavedFile("");
-    // setSourceFile("")
     setSourceFile(sourceData)
     setSavedFile(targetData)
   }, [sourceData, fileName])
@@ -95,47 +92,33 @@ export default function Component({ sourceData, targetData, fileName, resource, 
 
 
   const onSave = (_savedFile) => {
-    // const notification=New Notification({Title: "File Saved",body:'Successfully'});
-    //const notification = new Notification({title: 'File', body: 'Saved'});
-    setSavedFile(_savedFile);
+    if (resource === 'en_tq') {
+      let filepath = filePath.includes("Resources/") ? filePath.replace(`Resources/${resource}-release_v77`, "Output") : filePath
 
-    // if (resource === 'en_tq') {
-    //   let filepath = filePath.includes("Resources/") ? filePath.replace(`Resources/${resource}-release_v77`, "Output") : filePath
-    //   console.log(resource, filePath)
+      fs.writeFile(filepath, _savedFile, function (err) {
+        if (err) {
+          alert("An error ocurred updating the file" + err.message);
+          console.log(err);
+          return;
+        }
+        alert("The file has been successfully saved");
+        setSavedFile(_savedFile);
+      });
+    }
+    else if (resource === 'en_tn') {
 
+      let filepath = filePath.includes("Resources/") ? filePath.replace(`Resources/${resource}-release_v77`, "Output") : filePath
+      fs.writeFile(filepath, _savedFile, function (err) {
+        if (err) {
+          alert("An error ocurred updating the file" + err.message);
+          console.log(err);
+          return;
+        }
+        alert("The file has been successfully saved");
+        setSavedFile(_savedFile);
+      });
 
-    //   fs.writeFile(filepath, _savedFile, function (err) {
-    //     if (err) {
-    //       alert("An error ocurred updating the file" + err.message);
-    //       console.log(err);
-    //       return;
-    //     }
-    //     alert("The file has been successfully saved");
-    //     setSavedFile(_savedFile);
-    //     //preventDefault()
-
-    //   });
-    // }
-    // else if (resource === 'en_tn') {
-
-    //   let filepath = filePath.includes("Resources/") ? filePath.replace(`Resources/${resource}-release_v77`, "Output") : filePath
-
-    //   console.log(resource, filePath)
-
-    //   fs.writeFile(filepath, _savedFile, function (err) {
-    //     if (err) {
-    //       alert("An error ocurred updating the file" + err.message);
-    //       console.log(err);
-    //       return;
-    //     }
-    //     alert("The file has been successfully saved");
-    //     setSavedFile(_savedFile);
-    //     //preventDefault()
-
-    //   });
-
-    // }
-
+    }
   };
 
   const onValidate = () => {

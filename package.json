@@ -6,6 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electronite .",
+    "build":"react-scripts build",
+    "build-electron": "npm run build && electron-builder",
     "watch": "webpack --config webpack.common.js --watch"
   },
   "author": "Liju",
