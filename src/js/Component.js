@@ -6,7 +6,7 @@ var fs = require('fs');
 
 
 
-export default function Component({ sourceData, targetData, fileName, resource, filePath, fileType, onSaveEdited }) {
+export default function Component({ sourceData, targetData, fileName, resource, filePath, fileType }) {
   const [sourceFile, setSourceFile] = React.useState("");
   const [savedFile, setSavedFile] = React.useState('');
   const [res, setRes] = React.useState("");
@@ -24,11 +24,6 @@ export default function Component({ sourceData, targetData, fileName, resource, 
     setSourceFile(sourceData)
     setSavedFile(targetData)
   }, [sourceData, fileName])
-
-
-  useEffect(() => {
-    onSaveEdited(savedFile)
-  }, [savedFile])
 
   //Uncomment this to test a page change from a new source file
   // setTimeout(() => {
