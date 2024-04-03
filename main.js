@@ -1,7 +1,7 @@
-const { app, BrowserWindow, ipcMain } = require('electronite');
-const path = require('path');
+const { app, BrowserWindow, ipcMain } = require("electronite");
+const path = require("path");
 const isDev = !app.isPackaged;
-require('@electron/remote/main').initialize()
+require("@electron/remote/main").initialize();
 
 // Browser Window <- Renderer Process
 function createWindow() {
@@ -21,32 +21,34 @@ function createWindow() {
       worldSafeExecuteJavaScript: true,
       // is a feature that ensures that both, your preload scripts and Electron
       // internal logic run in separate context
-      contextIsolation: false
-    }
-  })
+      contextIsolation: false,
+    },
+  });
 
   require("@electron/remote/main").enable(win.webContents);
 
-  win.loadFile('index.html')
+  win.loadFile("index.html");
   win.setMenu(null);
-  isDev && win.webContents.openDevTools();
+  // isDev && win.webContents.openDevTools();
 }
 
 if (isDev) {
-  require('electron-reload')(__dirname, { electron: path.join(__dirname, 'node_modules', '.bin', 'electronite') })
+  require("electron-reload")(__dirname, {
+    electron: path.join(__dirname, "node_modules", ".bin", "electronite"),
+  });
 }
 app.whenReady().then(createWindow);
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
     app.quit();
   }
-})
-app.on('activate', () => {
+});
+app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
-})
+});
 // Chromium -> web eingine for rendering the UI, full Chrome-like web browser
 // V8 -> engine that provides capabilities to execute, run, JS code in the browser
 // Node JS(V8) -> we are able to run JS code + provides more features
