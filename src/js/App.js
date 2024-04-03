@@ -206,11 +206,11 @@ export default function App() {
   // console.log({ fileName, sourceData, targetData, resource, loading, filePath, fileType, editedContent })
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Grid container spacing={4}>
+    <Box sx={{ width: '100%', position: 'fixed', top: 0, left: 0 }}>
+      <Grid container spacing={4} style={{ overflow: 'hidden', paddingBottom: '50px' }}>
 
         <Grid item xs={6} md={6}>
-          <Button variant="contained" size='small' color="primary" id="select-file" onClick={handleChange}>
+          <Button style={{ marginLeft: '5px' }} variant="contained" size='small' color="primary" id="select-file" onClick={handleChange}>
             Open File
           </Button>
           {/* <input ref={fileInputRef} type="file" style={{ display: 'none' }} onChange={handleChange} /> */}
@@ -260,17 +260,18 @@ export default function App() {
             }}
           />
         </Grid>
-        <Grid xs={12} md={12} style={{ border: '1px black solid', margin: '15px' }}>
-          {(sourceData?.length > 0 && targetData?.length > 0 && loading === false) ?
-            (
-              fileType === 'tsv' ?
-                <Component sourceData={sourceData} targetData={targetData} fileName={fileName} resource={resource} filePath={filePath} fileType={fileType} />
-                :
-                // <MdOffline sourceData={sourceData} targetData={targetData} fileName={fileName} resource={resource} filePath={filePath} fileType={fileType} />
-                <MarkdownTranslatable sourceData={sourceData} targetData={targetData} fileName={fileName} resource={resource} filePath={filePath} fileType={fileType} />
-            )
-            : "Please select a file"}
-
+        <Grid xs={12} md={12} style={{ border: '1px black solid', margin: '20px' }}>
+          <div style={{ overflowY: 'auto', maxHeight: 'calc(88vh - 64px - 15px)' }}>
+            {(sourceData?.length > 0 && targetData?.length > 0 && loading === false) ?
+              (
+                fileType === 'tsv' ?
+                  <Component sourceData={sourceData} targetData={targetData} fileName={fileName} resource={resource} filePath={filePath} fileType={fileType} />
+                  :
+                  // <MdOffline sourceData={sourceData} targetData={targetData} fileName={fileName} resource={resource} filePath={filePath} fileType={fileType} />
+                  <MarkdownTranslatable sourceData={sourceData} targetData={targetData} fileName={fileName} resource={resource} filePath={filePath} fileType={fileType} />
+              )
+              : "Please select a file"}
+          </div>
         </Grid>
 
       </Grid>
