@@ -5,7 +5,7 @@ import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import MarkdownTranslatable from './MarkdownTranslatable';
 import PrintPreview from "./PrintPreview";
 import AlertDialog from './Dialog';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, CircularProgress, Chip } from '@mui/material';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 
@@ -70,8 +70,15 @@ export default function App() {
         result => {
           setLoading(true)
           let file = result.filePaths[0].split(".")[0];
-
-          if (result.filePaths[0].includes("en_tn")) {
+          const fileExtension = result.filePaths[0].split(".").pop()
+          console.log("-----------------------", fileExtension)
+          if (fileExtension !== 'md' && fileExtension !== 'tsv') {
+            // Show message that only TSV and MD files are allowed
+            alert("Only TSV and MD files are supported.");
+            setLoading(false);
+            return;
+          }
+          else if (result.filePaths[0].includes("en_tn")) {
             resType = "en_tn"
             setResource("en_tn")
           } else if (result.filePaths[0].includes("en_tq")) {
@@ -123,6 +130,7 @@ export default function App() {
           }
         }).catch(err => {
           console.log(err)
+          setLoading(false);
         }
         )
     }
@@ -142,8 +150,15 @@ export default function App() {
         result => {
           setLoading(true)
           let file = result.filePaths[0].split(".")[0];
-
-          if (result.filePaths[0].includes("en_tn")) {
+          const fileExtension = result.filePaths[0].split(".").pop()
+          console.log("-----------------------", fileExtension)
+          if (fileExtension !== 'md' && fileExtension !== 'tsv') {
+            // Show message that only TSV and MD files are allowed
+            alert("Only TSV and MD files are supported.");
+            setLoading(false);
+            return;
+          }
+          else if (result.filePaths[0].includes("en_tn")) {
             resType = "en_tn"
             setResource("en_tn")
           } else if (result.filePaths[0].includes("en_tq")) {
@@ -195,9 +210,9 @@ export default function App() {
           }
         }).catch(err => {
           console.log(err)
+          setLoading(false);
         }
         )
-
       setIsOpenDialog(false)
     }
 
@@ -207,7 +222,7 @@ export default function App() {
 
   return (
     <Box sx={{ width: '100%', position: 'fixed', top: 0, left: 0 }}>
-      <Grid container spacing={4} style={{ overflow: 'hidden', paddingBottom: '50px' }}>
+      <Grid container spacing={4} style={{ overflow: 'hidden', paddingBottom: '50px', marginTop: '10px' }}>
 
         <Grid item xs={6} md={6}>
           <Button style={{ marginLeft: '5px' }} variant="contained" size='small' color="primary" id="select-file" onClick={handleChange}>
@@ -260,19 +275,39 @@ export default function App() {
             }}
           />
         </Grid>
-        <Grid xs={12} md={12} style={{ border: '1px black solid', margin: '20px' }}>
-          <div style={{ overflowY: 'auto', maxHeight: 'calc(88vh - 64px - 15px)' }}>
-            {(sourceData?.length > 0 && targetData?.length > 0 && loading === false) ?
-              (
-                fileType === 'tsv' ?
-                  <Component sourceData={sourceData} targetData={targetData} fileName={fileName} resource={resource} filePath={filePath} fileType={fileType} />
-                  :
-                  // <MdOffline sourceData={sourceData} targetData={targetData} fileName={fileName} resource={resource} filePath={filePath} fileType={fileType} />
-                  <MarkdownTranslatable sourceData={sourceData} targetData={targetData} fileName={fileName} resource={resource} filePath={filePath} fileType={fileType} />
-              )
-              : "Please select a file"}
-          </div>
+
+        {/* 
+        <Grid xs={6} md={6}>
+          <Chip label="Source" variant="outlined" color="secondary" size="small" />
         </Grid>
+        <Grid xs={6} md={6}>
+          <Chip label="Target" variant="outlined" color="secondary" size="small" />
+        </Grid> */}
+        <Chip label="Source" color="secondary" size="small" style={{ marginLeft: '200px' }} />
+        <Chip label="Target" color="secondary" size="small" style={{ marginLeft: '400px' }} />
+
+
+        {loading ? (
+          <div style={{ marginLeft: '450px', marginTop: '350px' }}>
+            <CircularProgress />
+          </div>
+        ) : (
+          <Grid xs={12} md={12} style={{ border: '1px black solid', margin: '20px' }}>
+            <div style={{ overflowY: 'auto', maxHeight: 'calc(88vh - 64px - 15px)' }}>
+              {(sourceData?.length > 0 && targetData?.length > 0 && loading === false) ?
+                (
+                  fileType === 'tsv' ?
+                    <Component sourceData={sourceData} targetData={targetData} fileName={fileName} resource={resource} filePath={filePath} fileType={fileType} />
+                    :
+                    // <MdOffline sourceData={sourceData} targetData={targetData} fileName={fileName} resource={resource} filePath={filePath} fileType={fileType} />
+                    <MarkdownTranslatable sourceData={sourceData} targetData={targetData} fileName={fileName} resource={resource} filePath={filePath} fileType={fileType} />
+                )
+                : "Please select a file"}
+            </div>
+          </Grid>
+        )
+        }
+
 
       </Grid>
 

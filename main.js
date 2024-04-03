@@ -28,6 +28,7 @@ function createWindow() {
   require("@electron/remote/main").enable(win.webContents);
 
   win.loadFile('index.html')
+  win.setMenu(null);
   isDev && win.webContents.openDevTools();
 }
 
