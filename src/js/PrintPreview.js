@@ -10,7 +10,8 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { useReactToPrint } from 'react-to-print';
-import ReactMarkdown from 'react-markdown';
+import Markdown from 'react-markdown';
+import Reference from './jsonToHtml';
 
 const styles = (theme) => ({
   root: {
@@ -108,9 +109,16 @@ export default function PrintPreview({ filePath, fileName, fileType, targetData 
     fileName: fileName
 
   });
-  let outString = `file:///home/bcs04/UW/BCS-UW/uw-lab/tc-create-offline-poc/src/assets/images${fileName}`
-  let _targetData = targetData.replaceAll(outString, 'https://cdn.door43.org/obs/jpg/360px')
-  // console.log("mmmmmmmmmmmmmmmmmmm", _targetData)
+
+
+
+  // let outString = `file:///home/bcs04/UW/BCS-UW/uw-lab/tc-create-offline-poc/src/assets/images${fileName}`
+  // let _targetData = targetData.replaceAll(outString, 'https://cdn.door43.org/obs/jpg/360px')
+
+  // console.log({ targetData, _targetData })
+
+
+
 
   return (
     <div>
@@ -126,8 +134,9 @@ export default function PrintPreview({ filePath, fileName, fileType, targetData 
           <div style={{}}>
             <div className="note" ref={componentRef} style={{ margin: 90, textAlign: 'justify' }}>
               {fileType === 'tsv' ?
-                <ReactMarkdown>{previewData.replace(/\\n/g, '\n')}</ReactMarkdown> :
-                <ReactMarkdown>{_targetData}</ReactMarkdown>
+                <Markdown>{previewData.replace(/\\n/g, '\n')}</Markdown> :
+                // <Markdown>{_targetData}</Markdown>
+                <Reference data={targetData} />
               }
             </div>
           </div>

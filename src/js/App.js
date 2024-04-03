@@ -112,7 +112,7 @@ export default function App() {
             }
             let data = fs.readFileSync(sourceFilePath,
               { encoding: 'utf8', flag: 'r' })
-            let newData = data.replaceAll('https://cdn.door43.org/obs/jpg/360px', `file:///home/bcs04/UW/BCS-UW/uw-lab/tc-create-offline-poc/src/assets/images${_fileName}`)
+            let newData = data.replaceAll('https://cdn.door43.org/obs/jpg/360px', `file:///${__dirname}/src/assets/images${_fileName}`)
             // data.replace('', `file:///home/bcs04/UW/BCS-UW/uw-lab/tc-create-offline-poc/src/assets/images/${2}`)
             // console.log("ppppp", newData)
             setSourceData(newData);
@@ -192,7 +192,7 @@ export default function App() {
             }
             let data = fs.readFileSync(sourceFilePath,
               { encoding: 'utf8', flag: 'r' })
-            let newData = data.replaceAll('https://cdn.door43.org/obs/jpg/360px', `file:///home/bcs04/UW/BCS-UW/uw-lab/tc-create-offline-poc/src/assets/images${_fileName}`)
+            let newData = data.replaceAll('https://cdn.door43.org/obs/jpg/360px', `file:///${__dirname}/src/assets/images${_fileName}`)
             // data.replace('', `file:///home/bcs04/UW/BCS-UW/uw-lab/tc-create-offline-poc/src/assets/images/${2}`)
             // console.log("ppppp", newData)
             setSourceData(newData);
