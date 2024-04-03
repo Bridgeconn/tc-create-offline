@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Component from './Component'
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import MarkdownTranslatable from './MarkdownTranslatable';
-import MdOffline from './MdOffline';
 import PrintPreview from "./PrintPreview";
 import AlertDialog from './Dialog';
 import { Button, TextField } from '@mui/material';
@@ -25,6 +24,7 @@ export default function App() {
   const [filePath, setFilePath] = useState("");
   const [fileType, setFileType] = useState("");
   let resType
+  // const fileInputRef = useRef(null);
 
 
 
@@ -33,6 +33,7 @@ export default function App() {
       shell.showItemInFolder(filePath)
     }
   };
+
 
 
   const clearState = () => {
@@ -47,8 +48,18 @@ export default function App() {
     document.getElementById("target-file").value = "Please select the source file"
   }
 
+  // const handleClick = () => {
+  //   fileInputRef.current.click();
+  // };
 
-  const selectFile = () => {
+  // const ss = (event) => {
+  //   const selectedFile = event.target.files[0];
+  //   // Process the selected file (e.g., display its name in a modal on top)
+  //   let file = selectedFile.path.split('.')
+  //   console.log({ selectedFile, file });
+  // };
+
+  const handleChange = () => {
     if (fileName) {
       setIsOpenDialog(true)
     } else {
@@ -71,8 +82,9 @@ export default function App() {
             resType = "en_obs"
             setResource("en_obs")
           }
-
+          let _fileName = file.substring(file.length - 3, file.length)
           setFileName(file.substring(file.length - 3, file.length));
+
           if (!result.canceled) {
             let sourceFilePath = result.filePaths[0]
             let fType = result.filePaths[0].split('.');
@@ -93,9 +105,13 @@ export default function App() {
             }
             let data = fs.readFileSync(sourceFilePath,
               { encoding: 'utf8', flag: 'r' })
-            setSourceData(data);
+            let newData = data.replaceAll('https://cdn.door43.org/obs/jpg/360px', `file:///home/bcs04/UW/BCS-UW/uw-lab/tc-create-offline-poc/src/assets/images${_fileName}`)
+            // data.replace('', `file:///home/bcs04/UW/BCS-UW/uw-lab/tc-create-offline-poc/src/assets/images/${2}`)
+            // console.log("ppppp", newData)
+            setSourceData(newData);
+
             if (sourceFilePath === targetFilePath) {
-              setTargetData(data)
+              setTargetData(newData)
             }
             else if ((sourceFilePath !== targetFilePath)) {
               let targetdata = fs.readFileSync(targetFilePath,
@@ -107,9 +123,9 @@ export default function App() {
           }
         }).catch(err => {
           console.log(err)
-        })
+        }
+        )
     }
-
   }
 
 
@@ -119,65 +135,74 @@ export default function App() {
 
   const handleDialogConfirm = () => {
     clearState()
-    dialog.showOpenDialog({
-      defaultPath: path.join(__dirname, 'src', 'assets', 'Resources'),
-    }).then(
-      result => {
-        setLoading(true)
-        let file = result.filePaths[0].split(".")[0];
+    if (!loading) {
+      dialog.showOpenDialog({
+        defaultPath: path.join(__dirname, 'src', 'assets', 'Resources'),
+      }).then(
+        result => {
+          setLoading(true)
+          let file = result.filePaths[0].split(".")[0];
 
-        if (result.filePaths[0].includes("en_tn")) {
-          resType = "en_tn"
-          setResource("en_tn")
-        } else if (result.filePaths[0].includes("en_tq")) {
-          resType = "en_tq"
-          setResource("en_tq")
+          if (result.filePaths[0].includes("en_tn")) {
+            resType = "en_tn"
+            setResource("en_tn")
+          } else if (result.filePaths[0].includes("en_tq")) {
+            resType = "en_tq"
+            setResource("en_tq")
 
-        } else if (result.filePaths[0].includes("en_obs")) {
-          resType = "en_obs"
-          setResource("en_obs")
-        }
-
-        setFileName(file.substring(file.length - 3, file.length));
-        if (!result.canceled) {
-          let sourceFilePath = result.filePaths[0]
-          let fType = result.filePaths[0].split('.');
-          setFileType(fType[1])
-
-          document.getElementById("actual-file").value = sourceFilePath.split("Resources/")[1];
-
-          let fileInOutputName
-          let targetFilePath
-          if (resType === 'en_tn') {
-            fileInOutputName = result.filePaths[0].replace(`Resources/${resType}-release_v77`, "Output")
-            targetFilePath = (fs.existsSync(fileInOutputName) ? fileInOutputName : result.filePaths[0]);
-            document.getElementById("target-file").value = targetFilePath.includes("Resources") ? targetFilePath.split("Resources/")[1] : targetFilePath.split("assets/")[1];
-          } else if (resType === 'en_obs') {
-            fileInOutputName = result.filePaths[0].replace(`Resources/${resType}-v9`, "Output")
-            targetFilePath = (fs.existsSync(fileInOutputName) ? fileInOutputName : result.filePaths[0]);
-            document.getElementById("target-file").value = targetFilePath.includes("Resources") ? targetFilePath.split("Resources/")[1] : targetFilePath.split("assets/")[1];
+          } else if (result.filePaths[0].includes("en_obs")) {
+            resType = "en_obs"
+            setResource("en_obs")
           }
-          let data = fs.readFileSync(sourceFilePath,
-            { encoding: 'utf8', flag: 'r' })
-          setSourceData(data);
-          if (sourceFilePath === targetFilePath) {
-            setTargetData(data)
-          }
-          else if ((sourceFilePath !== targetFilePath)) {
-            let targetdata = fs.readFileSync(targetFilePath,
+          let _fileName = file.substring(file.length - 3, file.length)
+          setFileName(file.substring(file.length - 3, file.length));
+
+          if (!result.canceled) {
+            let sourceFilePath = result.filePaths[0]
+            let fType = result.filePaths[0].split('.');
+            setFileType(fType[1])
+
+            document.getElementById("actual-file").value = sourceFilePath.split("Resources/")[1];
+
+            let fileInOutputName
+            let targetFilePath
+            if (resType === 'en_tn') {
+              fileInOutputName = result.filePaths[0].replace(`Resources/${resType}-release_v77`, "Output")
+              targetFilePath = (fs.existsSync(fileInOutputName) ? fileInOutputName : result.filePaths[0]);
+              document.getElementById("target-file").value = targetFilePath.includes("Resources") ? targetFilePath.split("Resources/")[1] : targetFilePath.split("assets/")[1];
+            } else if (resType === 'en_obs') {
+              fileInOutputName = result.filePaths[0].replace(`Resources/${resType}-v9`, "Output")
+              targetFilePath = (fs.existsSync(fileInOutputName) ? fileInOutputName : result.filePaths[0]);
+              document.getElementById("target-file").value = targetFilePath.includes("Resources") ? targetFilePath.split("Resources/")[1] : targetFilePath.split("assets/")[1];
+            }
+            let data = fs.readFileSync(sourceFilePath,
               { encoding: 'utf8', flag: 'r' })
-            setTargetData(targetdata)
+            let newData = data.replaceAll('https://cdn.door43.org/obs/jpg/360px', `file:///home/bcs04/UW/BCS-UW/uw-lab/tc-create-offline-poc/src/assets/images${_fileName}`)
+            // data.replace('', `file:///home/bcs04/UW/BCS-UW/uw-lab/tc-create-offline-poc/src/assets/images/${2}`)
+            // console.log("ppppp", newData)
+            setSourceData(newData);
+
+            if (sourceFilePath === targetFilePath) {
+              setTargetData(newData)
+            }
+            else if ((sourceFilePath !== targetFilePath)) {
+              let targetdata = fs.readFileSync(targetFilePath,
+                { encoding: 'utf8', flag: 'r' })
+              setTargetData(targetdata)
+            }
+            setFilePath(targetFilePath)
+            setLoading(false);
           }
-          setFilePath(targetFilePath)
-          setLoading(false);
+        }).catch(err => {
+          console.log(err)
         }
-      }).catch(err => {
-        console.log(err)
-      })
-    setIsOpenDialog(false)
+        )
+
+      setIsOpenDialog(false)
+    }
 
   };
-
+  // console.log('++++++++++++++', fileName)
   // console.log({ fileName, sourceData, targetData, resource, loading, filePath, fileType, editedContent })
 
   return (
@@ -185,9 +210,10 @@ export default function App() {
       <Grid container spacing={4}>
 
         <Grid item xs={6} md={6}>
-          <Button variant="contained" size='small' color="primary" id="select-file" onClick={() => selectFile()}>
+          <Button variant="contained" size='small' color="primary" id="select-file" onClick={handleChange}>
             Open File
           </Button>
+          {/* <input ref={fileInputRef} type="file" style={{ display: 'none' }} onChange={handleChange} /> */}
         </Grid>
         <Grid item xs={6} md={6}>
 

@@ -96,8 +96,8 @@ export default function Component({ sourceData, targetData, fileName, resource, 
           console.log(err);
           return;
         }
-        alert("The file has been successfully saved");
         setSavedFile(_savedFile);
+        alert("The file has been successfully saved");
       });
     }
     else if (resource === 'en_tn') {
@@ -109,15 +109,16 @@ export default function Component({ sourceData, targetData, fileName, resource, 
           console.log(err);
           return;
         }
-        alert("The file has been successfully saved");
         setSavedFile(_savedFile);
+        console.log("The file has been successfully saved");
       });
+      alert("The file has been successfully saved");
 
     }
   };
 
   const onValidate = () => {
-    alert("Validate!");
+    console.log("Validate!");
   };
   const generateRowId = (rowData) => {
     const reference = rowData[1].split(delimiters.cell)[0];

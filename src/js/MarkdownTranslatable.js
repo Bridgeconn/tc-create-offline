@@ -24,6 +24,7 @@ const MarkdownTranslatable = ({ sourceData, targetData, resource, filePath, file
           return;
         }
         setTranslation(_translation);
+        alert("The file has been successfully saved");
         console.log("The file has been successfully saved");
       });
     }

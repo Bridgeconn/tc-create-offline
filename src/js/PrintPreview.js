@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 // import Button from '@material-ui/core/Button';
-import {Button} from '@mui/material';
+import { Button } from '@mui/material';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
@@ -104,14 +104,17 @@ export default function PrintPreview({ filePath, fileName, fileType, targetData 
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
+    // documentName: fileName,
+    fileName: fileName
 
   });
-
-  console.log("mmmmmmmmmmmmmmmmmmm", fileType)
+  let outString = `file:///home/bcs04/UW/BCS-UW/uw-lab/tc-create-offline-poc/src/assets/images${fileName}`
+  let _targetData = targetData.replaceAll(outString, 'https://cdn.door43.org/obs/jpg/360px')
+  // console.log("mmmmmmmmmmmmmmmmmmm", _targetData)
 
   return (
     <div>
-      <Button variant="contained" size='small' color="primary" onClick={handleClickOpen}>
+      <Button variant="contained" size='small' color="primary" onClick={handleClickOpen} disabled={!fileName}>
         Print
       </Button>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} maxWidth={'lg'}>
@@ -123,9 +126,9 @@ export default function PrintPreview({ filePath, fileName, fileType, targetData 
           <div style={{}}>
             <div className="note" ref={componentRef} style={{ margin: 90, textAlign: 'justify' }}>
               {fileType === 'tsv' ?
-               <ReactMarkdown>{previewData.replace(/\\n/g, '\n')}</ReactMarkdown> :
-               <ReactMarkdown>{targetData}</ReactMarkdown>
-               }
+                <ReactMarkdown>{previewData.replace(/\\n/g, '\n')}</ReactMarkdown> :
+                <ReactMarkdown>{_targetData}</ReactMarkdown>
+              }
             </div>
           </div>
 
