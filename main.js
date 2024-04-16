@@ -1,4 +1,5 @@
-const { app, BrowserWindow, ipcMain } = require("electronite");
+// const { app, BrowserWindow, ipcMain } = require("electronite");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const isDev = !app.isPackaged;
 require("@electron/remote/main").initialize();
@@ -7,10 +8,10 @@ require("@electron/remote/main").initialize();
 function createWindow() {
   // Browser Window <- Renderer Process
   const win = new BrowserWindow({
-    width: 1200,
-    height: 1000,
-    //minWidth:800,
-    //minHeight:700,
+    width: 1450,
+    height: 800,
+    minWidth:1450,
+    minHeight:700,
 
     // backgroundColor: "white",
     webPreferences: {
@@ -34,7 +35,8 @@ function createWindow() {
 
 if (isDev) {
   require("electron-reload")(__dirname, {
-    electron: path.join(__dirname, "node_modules", ".bin", "electronite"),
+    // electron: path.join(__dirname, "node_modules", ".bin", "electronite"),
+    electron: path.join(__dirname, "node_modules", ".bin", "electron"),
   });
 }
 app.whenReady().then(createWindow);
