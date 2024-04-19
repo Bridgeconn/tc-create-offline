@@ -33,16 +33,18 @@ export default function App() {
       shell.showItemInFolder(filePath);
     }
   };
-// let targetFilePath;
-  useEffect(() => {if(filePath){
-    document.getElementById("target-file").value =
-    filePath.includes("Resources")
-      ? filePath.split("Resources/")[1]
-      : filePath.split("tc-create/")[1]}
-      else{
-        document.getElementById("target-file").value = "Please select the Source"
-      }
-  },[filePath])
+  // let targetFilePath;
+  useEffect(() => {
+    if (filePath) {
+      document.getElementById("target-file").value = filePath.includes(
+        "Resources"
+      )
+        ? filePath.split("assets/Resources/")[1]
+        : filePath.split("tc-create/")[1];
+    } else {
+      document.getElementById("target-file").value = "Please select the Source";
+    }
+  }, [filePath]);
 
   const clearState = () => {
     setFileName("");
@@ -57,10 +59,8 @@ export default function App() {
       "Please select the source file";
   };
 
-  
-
   const handleChange = () => {
-    console.log("change")
+    console.log("change");
     if (fileName) {
       setIsOpenDialog(true);
     } else {
@@ -70,7 +70,7 @@ export default function App() {
         })
         .then((result) => {
           setLoading(true);
-          let file = result.filePaths[0].split(".")[0];
+          let file = result.filePaths[0].split(".md")[0];
           const fileExtension = result.filePaths[0].split(".").pop();
           if (fileExtension !== "md" && fileExtension !== "tsv") {
             // Show message that only TSV and MD files are allowed
@@ -81,7 +81,7 @@ export default function App() {
             resType = "tn";
             setResource("en_tn");
           }
-            //  else if (result.filePaths[0].includes("en_tq")) {
+          //  else if (result.filePaths[0].includes("en_tq")) {
           //   resType = "tq";
           //   setResource("en_tq");
           // } else if (result.filePaths[0].includes("en_twl")) {
@@ -105,7 +105,7 @@ export default function App() {
           // } else if (result.filePaths[0].includes("en_obs-sq")) {
           //   resType = "obs_sq";
           //   setResource("en_obs_sq");
-          // } 
+          // }
           else if (result.filePaths[0].includes("en_obs")) {
             resType = "obs";
             setResource("en_obs");
@@ -115,11 +115,11 @@ export default function App() {
 
           if (!result.canceled) {
             let sourceFilePath = result.filePaths[0];
-            let fType = result.filePaths[0].split(".");
-            setFileType(fType[1]);
+            let fType = result.filePaths[0].split(".").pop();
+            setFileType(fType);
 
             document.getElementById("actual-file").value =
-              sourceFilePath.split("Resources/")[1];
+              sourceFilePath.split("assets/Resources/")[1];
 
             let fileInOutputName;
             let targetFilePath;
@@ -131,10 +131,9 @@ export default function App() {
                 "tn",
                 result.filePaths[0].split("en_tn-release_v77/en_tn")[1]
               );
-              targetFilePath =fs.existsSync(fileInOutputName)
+              targetFilePath = fs.existsSync(fileInOutputName)
                 ? fileInOutputName
                 : result.filePaths[0];
-              
             }
             //  else if (resType === "obs_sn") {
             //   fileInOutputName = path.join(
@@ -224,7 +223,7 @@ export default function App() {
             //   targetFilePath = fs.existsSync(fileInOutputName)
             //     ? fileInOutputName
             //     : result.filePaths[0];
-            // } 
+            // }
             else if (resType === "obs") {
               fileInOutputName = path.join(
                 homeDir,
@@ -233,7 +232,7 @@ export default function App() {
                 "obs",
                 result.filePaths[0].split("en_obs-v9/en_obs")[1]
               );
-               targetFilePath =fs.existsSync(fileInOutputName)
+              targetFilePath = fs.existsSync(fileInOutputName)
                 ? fileInOutputName
                 : result?.filePaths[0];
               // document.getElementById("target-file").value =
@@ -255,16 +254,16 @@ export default function App() {
 
             // Append the _fileName to the directory path
             const filePath = path.join(directoryPath, _fileName);
-
             let newData = data.replaceAll(
               "https://cdn.door43.org/obs/jpg/360px",
               `file://${filePath}`
             );
+
             // data.replace('', `file:///home/bcs04/UW/BCS-UW/uw-lab/tc-create-offline-poc/src/tc-create/images/${2}`)
             // console.log("ppppp", newData)
             setSourceData(newData);
             if (sourceFilePath === targetFilePath) {
-              console.log(sourceFilePath === targetFilePath,"src=trgt")
+              console.log(sourceFilePath === targetFilePath, "src=trgt");
               setTargetData(newData);
             } else if (sourceFilePath !== targetFilePath) {
               let targetdata = fs.readFileSync(targetFilePath, {
@@ -289,7 +288,7 @@ export default function App() {
   };
 
   const handleDialogConfirm = () => {
-    console.log("confirm")
+    console.log("confirm");
     clearState();
     if (!loading) {
       dialog
@@ -299,6 +298,7 @@ export default function App() {
         .then((result) => {
           setLoading(true);
           let file = result.filePaths[0].split(".")[0];
+          console.log(file, "file");
           const fileExtension = result.filePaths[0].split(".").pop();
           if (fileExtension !== "md" && fileExtension !== "tsv") {
             // Show message that only TSV and MD files are allowed
@@ -309,7 +309,7 @@ export default function App() {
             resType = "tn";
             setResource("en_tn");
           }
-            //  else if (result.filePaths[0].includes("en_tq")) {
+          //  else if (result.filePaths[0].includes("en_tq")) {
           //   resType = "tq";
           //   setResource("en_tq");
           // } else if (result.filePaths[0].includes("en_twl")) {
@@ -334,7 +334,7 @@ export default function App() {
           //   resType = "obs_sq";
           //   setResource("en_obs_sq");
           // }
-           else if (result.filePaths[0].includes("en_obs")) {
+          else if (result.filePaths[0].includes("en_obs")) {
             resType = "obs";
             setResource("en_obs");
           }
@@ -343,11 +343,11 @@ export default function App() {
 
           if (!result.canceled) {
             let sourceFilePath = result.filePaths[0];
-            let fType = result.filePaths[0].split(".");
-            setFileType(fType[1]);
+            let fType = result.filePaths[0].split(".").pop();
+            setFileType(fType);
 
             document.getElementById("actual-file").value =
-              sourceFilePath.split("Resources/")[1];
+              sourceFilePath.split("assets/Resources/")[1];
 
             let fileInOutputName;
             let targetFilePath;
@@ -453,7 +453,7 @@ export default function App() {
             //     ? fileInOutputName
             //     : result.filePaths[0];
             //}
-             else if (resType === "obs") {
+            else if (resType === "obs") {
               fileInOutputName = path.join(
                 homeDir,
                 "tc-create",
@@ -483,7 +483,6 @@ export default function App() {
 
             // Append the _fileName to the directory path
             const filePath = path.join(directoryPath, _fileName);
-
             let newData = data.replaceAll(
               "https://cdn.door43.org/obs/jpg/360px",
               `file://${filePath}`
@@ -517,7 +516,7 @@ export default function App() {
     <Box
       sx={{ width: "100%", height: "100%", position: "fixed", top: 0, left: 0 }}
     >
-    {console.log(filePath,"fafdas")}
+      {console.log(filePath, "fafdas")}
       <Grid
         container
         spacing={4}
@@ -644,7 +643,8 @@ export default function App() {
               }}
             >
               {sourceData?.length > 0 &&
-              targetData?.length > 0 && filePath!== undefined &&
+              targetData?.length > 0 &&
+              filePath !== undefined &&
               loading === false ? (
                 fileType === "tsv" ? (
                   <Component
@@ -656,7 +656,6 @@ export default function App() {
                     fileType={fileType}
                     setFilePath={setFilePath}
                     setTargetData={setTargetData}
-
                   />
                 ) : (
                   // <MdOffline sourceData={sourceData} targetData={targetData} fileName={fileName} resource={resource} filePath={filePath} fileType={fileType} />
