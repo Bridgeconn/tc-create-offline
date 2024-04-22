@@ -60,7 +60,6 @@ export default function App() {
   };
 
   const handleChange = () => {
-    console.log("change");
     if (fileName) {
       setIsOpenDialog(true);
     } else {
@@ -260,10 +259,8 @@ export default function App() {
             );
 
             // data.replace('', `file:///home/bcs04/UW/BCS-UW/uw-lab/tc-create-offline-poc/src/tc-create/images/${2}`)
-            // console.log("ppppp", newData)
             setSourceData(newData);
             if (sourceFilePath === targetFilePath) {
-              console.log(sourceFilePath === targetFilePath, "src=trgt");
               setTargetData(newData);
             } else if (sourceFilePath !== targetFilePath) {
               let targetdata = fs.readFileSync(targetFilePath, {
@@ -288,7 +285,6 @@ export default function App() {
   };
 
   const handleDialogConfirm = () => {
-    console.log("confirm");
     clearState();
     if (!loading) {
       dialog
@@ -298,7 +294,6 @@ export default function App() {
         .then((result) => {
           setLoading(true);
           let file = result.filePaths[0].split(".")[0];
-          console.log(file, "file");
           const fileExtension = result.filePaths[0].split(".").pop();
           if (fileExtension !== "md" && fileExtension !== "tsv") {
             // Show message that only TSV and MD files are allowed
@@ -488,7 +483,6 @@ export default function App() {
               `file://${filePath}`
             );
             // data.replace('', `file:///home/bcs04/UW/BCS-UW/uw-lab/tc-create-offline-poc/src/tc-create/images/${2}`)
-            // console.log("ppppp", newData)
             setSourceData(newData);
 
             if (sourceFilePath === targetFilePath) {
@@ -516,7 +510,6 @@ export default function App() {
     <Box
       sx={{ width: "100%", height: "100%", position: "fixed", top: 0, left: 0 }}
     >
-      {console.log(filePath, "fafdas")}
       <Grid
         container
         spacing={4}
