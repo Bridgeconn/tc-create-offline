@@ -35,9 +35,6 @@ export default function App() {
   };
   // let targetFilePath;
   useEffect(() => {
-    console.log(filePath);
-    console.log(filePath.split("Resources"));
-    console.log(filePath.split("tc-create"));
     if (filePath) {
       document.getElementById("target-file").value = filePath.includes(
         "Resources"
@@ -78,10 +75,6 @@ export default function App() {
     if (fileName) {
       setIsOpenDialog(true);
     } else {
-      console.log(
-        "open_path",
-        path.join(__dirname, "src", "assets", "Resources")
-      );
       dialog
         .showOpenDialog({
           // defaultPath: path.join(__dirname, "src", "assets", "Resources"),
@@ -113,7 +106,6 @@ export default function App() {
             // Mac Changes
             // let fType = result.filePaths[0].split(".").pop();
             // setFileType(fType);
-
             document.getElementById("actual-file").value =
               sourceFilePath.split("Resources\\")[1];
             // Mac changes
@@ -121,7 +113,6 @@ export default function App() {
 
             let fileInOutputName;
             let targetFilePath;
-            console.log("homeDir", homeDir);
             if (resType === "tn") {
               fileInOutputName = path.join(
                 homeDir,
@@ -144,7 +135,6 @@ export default function App() {
               targetFilePath = fs.existsSync(fileInOutputName)
                 ? fileInOutputName
                 : result?.filePaths[0];
-              console.log("targetFilePath", targetFilePath);
               // document.getElementById("target-file").value =
               //   targetFilePath.includes("Resources")
               //     ? targetFilePath.split("Resources/")[1]
@@ -172,7 +162,6 @@ export default function App() {
             // data.replace('', `file:///home/bcs04/UW/BCS-UW/uw-lab/tc-create-offline-poc/src/tc-create/images/${2}`)
             setSourceData(newData);
             if (sourceFilePath === targetFilePath) {
-              console.log(sourceFilePath === targetFilePath, "src=trgt");
               setTargetData(newData);
             } else if (sourceFilePath !== targetFilePath) {
               let targetdata = fs.readFileSync(targetFilePath, {
@@ -197,7 +186,6 @@ export default function App() {
   };
 
   const handleDialogConfirm = () => {
-    console.log("confirm");
     clearState();
     if (!loading) {
       dialog
@@ -228,9 +216,8 @@ export default function App() {
             let sourceFilePath = result.filePaths[0];
             let fType = result.filePaths[0].split(".").pop();
             setFileType(fType);
-
             document.getElementById("actual-file").value =
-              sourceFilePath.split("assets/Resources/")[1];
+              sourceFilePath.split("Resources\\")[1];
 
             let fileInOutputName;
             let targetFilePath;
@@ -307,7 +294,6 @@ export default function App() {
     <Box
       sx={{ width: "100%", height: "100%", position: "fixed", top: 0, left: 0 }}
     >
-      {console.log(filePath, "fafdas")}
       <Grid
         container
         spacing={4}
