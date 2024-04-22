@@ -30,7 +30,7 @@ function createWindow() {
 
   win.loadFile("index.html");
   win.setMenu(null);
-  isDev && win.webContents.openDevTools();
+  // isDev && win.webContents.openDevTools();
 }
 
 if (isDev) {

@@ -85,7 +85,7 @@ export default function App() {
       dialog
         .showOpenDialog({
           // defaultPath: path.join(__dirname, "src", "assets", "Resources"),
-          defaultPath: path.join(__dirname, "src", "assets", "Resources"),
+          defaultPath: path.join(__dirname, "..", "src", "assets", "Resources"),
         })
         .then((result) => {
           setLoading(true);
@@ -203,7 +203,7 @@ export default function App() {
       dialog
         .showOpenDialog({
           // defaultPath: path.join(__dirname, "src", "assets", "Resources"),
-          defaultPath: path.join(__dirname, "src", "assets", "Resources"),
+          defaultPath: path.join(__dirname, "..", "src", "assets", "Resources"),
         })
         .then((result) => {
           setLoading(true);
