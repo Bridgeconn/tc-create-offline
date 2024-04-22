@@ -122,7 +122,8 @@ export default function PrintPreview({ filePath, fileName, fileType, targetData 
 
   return (
     <div>
-      <Button variant="contained" size='small' color="primary" onClick={handleClickOpen} disabled={!fileName}>
+      <Button variant="contained" size='small' color="primary" onClick={handleClickOpen} disabled={filePath===""  || (!filePath.includes("Output")) }>
+       {/* disabled={!fileName && filePath!==""}> */}
         Print
       </Button>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} maxWidth={'lg'}>
