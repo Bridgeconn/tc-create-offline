@@ -10,8 +10,8 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1450,
     height: 800,
-    minWidth:1450,
-    minHeight:700,
+    minWidth: 1450,
+    minHeight: 700,
 
     // backgroundColor: "white",
     webPreferences: {
@@ -30,7 +30,7 @@ function createWindow() {
 
   win.loadFile("index.html");
   win.setMenu(null);
-  // isDev && win.webContents.openDevTools();
+  isDev && win.webContents.openDevTools();
 }
 
 if (isDev) {

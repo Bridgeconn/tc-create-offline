@@ -3,8 +3,8 @@ import { Typography } from "@material-ui/core";
 import { DataTable } from "datatable-translatable";
 import * as parser from "uw-tsv-parser";
 var fs = require("fs");
-const path = require('path');
-const os = require('os');
+const path = require("path");
+const os = require("os");
 const homeDir = os.homedir();
 export default function Component({
   sourceData,
@@ -14,7 +14,7 @@ export default function Component({
   filePath,
   fileType,
   setFilePath,
-  setTargetData
+  setTargetData,
 }) {
   const [sourceFile, setSourceFile] = React.useState(sourceData);
   const [savedFile, setSavedFile] = React.useState(targetData);
@@ -68,7 +68,7 @@ export default function Component({
   };
   // Column headers for 7 column format:
   // Reference, ID, Tags, SupportReference, Quote, Occurrence, and Annotation.
-  console.log(res,"resource")
+  console.log(res, "resource");
   const config =
     // (res==="en_twl" || res==="en_obs_sn")
     //   ? {
@@ -82,25 +82,25 @@ export default function Component({
     //       ],
     //       rowHeader,
     //     }
-      // : 
-      {
-          compositeKeyIndices: [0, 1],
-          columnsFilter: ["Reference", "ID", "Tags"],
-          columnsShowDefault: [
-            // "SupportReference",
-            "Quote",
-            "Occurrence",
-            // "Annotation",
-            // "Question",
-            // "Answer",
-          ],
-          rowHeader,
-        };
+    // :
+    {
+      compositeKeyIndices: [0, 1],
+      columnsFilter: ["Reference", "ID", "Tags"],
+      columnsShowDefault: [
+        // "SupportReference",
+        "Quote",
+        "Occurrence",
+        // "Annotation",
+        // "Question",
+        // "Answer",
+      ],
+      rowHeader,
+    };
 
   const onSave = (_savedFile) => {
     let filepath;
     if (resource === "en_tq") {
-      filepath = filePath.includes("Resources/")
+      filepath = filePath.includes("Resources")
         ? path.join(
             homeDir,
             "tc-create",
@@ -110,17 +110,17 @@ export default function Component({
           )
         : filePath;
     } else if (resource === "en_tn") {
-      filepath = filePath.includes("Resources/")
+      filepath = filePath.includes("Resources")
         ? path.join(
             homeDir,
             "tc-create",
             "Output",
             "tn",
-            filePath.split("en_tn-release_v77/en_tn")[1]
+            filePath.split("en_tn-release_v77")[1]
           )
         : filePath;
     } else if (resource === "en_obs_sn") {
-      filepath = filePath.includes("Resources/")
+      filepath = filePath.includes("Resources")
         ? path.join(
             homeDir,
             "tc-create",
@@ -130,7 +130,7 @@ export default function Component({
           )
         : filePath;
     } else if (resource === "en_obs_sq") {
-      filepath = filePath.includes("Resources/")
+      filepath = filePath.includes("Resources")
         ? path.join(
             homeDir,
             "tc-create",
@@ -140,7 +140,7 @@ export default function Component({
           )
         : filePath;
     } else if (resource === "en_obs_tn") {
-      filepath = filePath.includes("Resources/")
+      filepath = filePath.includes("Resources")
         ? path.join(
             homeDir,
             "tc-create",
@@ -150,7 +150,7 @@ export default function Component({
           )
         : filePath;
     } else if (resource === "en_obs_tq") {
-      filepath = filePath.includes("Resources/")
+      filepath = filePath.includes("Resources")
         ? path.join(
             homeDir,
             "tc-create",
@@ -160,7 +160,7 @@ export default function Component({
           )
         : filePath;
     } else if (resource === "en_twl") {
-      filepath = filePath.includes("Resources/")
+      filepath = filePath.includes("Resources")
         ? path.join(
             homeDir,
             "tc-create",
@@ -187,7 +187,6 @@ export default function Component({
       }
       setSavedFile(_savedFile);
       console.log("The file has been successfully saved");
-
     });
     alert("The file has been successfully saved");
     setFilePath(filepath);

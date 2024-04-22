@@ -35,16 +35,31 @@ export default function App() {
   };
   // let targetFilePath;
   useEffect(() => {
+    console.log(filePath);
+    console.log(filePath.split("Resources"));
+    console.log(filePath.split("tc-create"));
     if (filePath) {
       document.getElementById("target-file").value = filePath.includes(
         "Resources"
       )
-        ? filePath.split("assets/Resources/")[1]
-        : filePath.split("tc-create/")[1];
+        ? filePath.split("Resources\\")[1]
+        : filePath.split("tc-create\\")[1];
     } else {
       document.getElementById("target-file").value = "Please select the Source";
     }
   }, [filePath]);
+  // Mac Steps
+  // useEffect(() => {
+  //   if (filePath) {
+  //     document.getElementById("target-file").value = filePath.includes(
+  //       "Resources"
+  //     )
+  //       ? filePath.split("Resources\\")[1]
+  //       : filePath.split("tc-create\\")[1];
+  //   } else {
+  //     document.getElementById("target-file").value = "Please select the Source";
+  //   }
+  // }, [filePath]);
 
   const clearState = () => {
     setFileName("");
@@ -63,9 +78,14 @@ export default function App() {
     if (fileName) {
       setIsOpenDialog(true);
     } else {
+      console.log(
+        "open_path",
+        path.join(__dirname, "src", "assets", "Resources")
+      );
       dialog
         .showOpenDialog({
-          defaultPath: path.join(__dirname, "..", "src", "assets", "Resources"),
+          // defaultPath: path.join(__dirname, "src", "assets", "Resources"),
+          defaultPath: path.join(__dirname, "src", "assets", "Resources"),
         })
         .then((result) => {
           setLoading(true);
@@ -79,33 +99,7 @@ export default function App() {
           } else if (result.filePaths[0].includes("en_tn")) {
             resType = "tn";
             setResource("en_tn");
-          }
-          //  else if (result.filePaths[0].includes("en_tq")) {
-          //   resType = "tq";
-          //   setResource("en_tq");
-          // } else if (result.filePaths[0].includes("en_twl")) {
-          //   resType = "twl";
-          //   setResource("en_twl");
-          // }else if (result.filePaths[0].includes("en_tw")) {
-          //   resType = "tw";
-          //   setResource("en_tw");
-          // } else if (result.filePaths[0].includes("en_ta")) {
-          //   resType = "ta";
-          //   setResource("en_ta");
-          // } else if (result.filePaths[0].includes("en_obs-tn")) {
-          //   resType = "obs_tn";
-          //   setResource("en_obs_tn");
-          // } else if (result.filePaths[0].includes("en_obs-tq")) {
-          //   resType = "obs_tq";
-          //   setResource("en_obs_tq");
-          // } else if (result.filePaths[0].includes("en_obs-sn")) {
-          //   resType = "obs_sn";
-          //   setResource("en_obs_sn");
-          // } else if (result.filePaths[0].includes("en_obs-sq")) {
-          //   resType = "obs_sq";
-          //   setResource("en_obs_sq");
-          // }
-          else if (result.filePaths[0].includes("en_obs")) {
+          } else if (result.filePaths[0].includes("en_obs")) {
             resType = "obs";
             setResource("en_obs");
           }
@@ -114,126 +108,43 @@ export default function App() {
 
           if (!result.canceled) {
             let sourceFilePath = result.filePaths[0];
-            let fType = result.filePaths[0].split(".").pop();
+            let fType = result.filePaths[0].split(".");
             setFileType(fType);
+            // Mac Changes
+            // let fType = result.filePaths[0].split(".").pop();
+            // setFileType(fType);
 
             document.getElementById("actual-file").value =
-              sourceFilePath.split("assets/Resources/")[1];
+              sourceFilePath.split("Resources\\")[1];
+            // Mac changes
+            // sourceFilePath.split("assets/Resources/")[1];
 
             let fileInOutputName;
             let targetFilePath;
+            console.log("homeDir", homeDir);
             if (resType === "tn") {
               fileInOutputName = path.join(
                 homeDir,
                 "tc-create",
                 "Output",
                 "tn",
-                result.filePaths[0].split("en_tn-release_v77/en_tn")[1]
+                result.filePaths[0].split("en_tn-release_v77")[1]
               );
               targetFilePath = fs.existsSync(fileInOutputName)
                 ? fileInOutputName
                 : result.filePaths[0];
-            }
-            //  else if (resType === "obs_sn") {
-            //   fileInOutputName = path.join(
-            //     homeDir,
-            //     "tc-create",
-            //     "Output",
-            //     "obs-sn",
-            //     result.filePaths[0].split("en_obs-sn-v5/en_obs-sn")[1]
-            //   );
-            //   targetFilePath = fs.existsSync(fileInOutputName)
-            //     ? fileInOutputName
-            //     : result.filePaths[0];
-            // } else if (resType === "obs_sq") {
-            //   fileInOutputName = path.join(
-            //     homeDir,
-            //     "tc-create",
-            //     "Output",
-            //     "obs-sq",
-            //     result.filePaths[0].split("en_obs-sq-v4/en_obs-sq")[1]
-            //   );
-            //   targetFilePath = fs.existsSync(fileInOutputName)
-            //     ? fileInOutputName
-            //     : result.filePaths[0];
-            // } else if (resType === "obs_tn") {
-            //   fileInOutputName = path.join(
-            //     homeDir,
-            //     "tc-create",
-            //     "Output",
-            //     "obs-tn",
-            //     result.filePaths[0].split("en_obs-tn-v12/en_obs-tn")[1]
-            //   );
-            //   targetFilePath = fs.existsSync(fileInOutputName)
-            //     ? fileInOutputName
-            //     : result.filePaths[0];
-            // } else if (resType === "obs_tq") {
-            //   fileInOutputName = path.join(
-            //     homeDir,
-            //     "tc-create",
-            //     "Output",
-            //     "obs-tq",
-            //     result.filePaths[0].split("en_obs-tq-v9/en_obs-tq")[1]
-            //   );
-            //   targetFilePath = fs.existsSync(fileInOutputName)
-            //     ? fileInOutputName
-            //     : result.filePaths[0];
-            // } else if (resType === "tq") {
-            //   fileInOutputName = path.join(
-            //     homeDir,
-            //     "tc-create",
-            //     "Output",
-            //     "tq",
-            //     result.filePaths[0].split("en_tq-release_v77/en_tq")[1]
-            //   );
-            //   targetFilePath = fs.existsSync(fileInOutputName)
-            //     ? fileInOutputName
-            //     : result.filePaths[0];
-            // } else if (resType === "twl") {
-            //   fileInOutputName = path.join(
-            //     homeDir,
-            //     "tc-create",
-            //     "Output",
-            //     "twl",
-            //     result.filePaths[0].split("en_twl-release_v77/en_twl")[1]
-            //   );
-            //   targetFilePath = fs.existsSync(fileInOutputName)
-            //     ? fileInOutputName
-            //     : result.filePaths[0];
-            // }else if (resType === "tw") {
-            //   fileInOutputName = path.join(
-            //     homeDir,
-            //     "tc-create",
-            //     "Output",
-            //     "tw",
-            //     result.filePaths[0].split("en_tw-release_v77/en_tw")[1]
-            //   );
-            //   targetFilePath = fs.existsSync(fileInOutputName)
-            //     ? fileInOutputName
-            //     : result.filePaths[0];
-            // }  else if (resType === "ta") {
-            //   fileInOutputName = path.join(
-            //     homeDir,
-            //     "tc-create",
-            //     "Output",
-            //     "ta",
-            //     result.filePaths[0].split("en_ta-release_v77/en_ta")[1]
-            //   );
-            //   targetFilePath = fs.existsSync(fileInOutputName)
-            //     ? fileInOutputName
-            //     : result.filePaths[0];
-            // }
-            else if (resType === "obs") {
+            } else if (resType === "obs") {
               fileInOutputName = path.join(
                 homeDir,
                 "tc-create",
                 "Output",
                 "obs",
-                result.filePaths[0].split("en_obs-v9/en_obs")[1]
+                result.filePaths[0].split("en_obs-v9")[1]
               );
               targetFilePath = fs.existsSync(fileInOutputName)
                 ? fileInOutputName
                 : result?.filePaths[0];
+              console.log("targetFilePath", targetFilePath);
               // document.getElementById("target-file").value =
               //   targetFilePath.includes("Resources")
               //     ? targetFilePath.split("Resources/")[1]
@@ -245,7 +156,7 @@ export default function App() {
             });
             const directoryPath = path.join(
               __dirname,
-              "..",
+              // "..",
               "src",
               "assets",
               "images"
@@ -261,6 +172,7 @@ export default function App() {
             // data.replace('', `file:///home/bcs04/UW/BCS-UW/uw-lab/tc-create-offline-poc/src/tc-create/images/${2}`)
             setSourceData(newData);
             if (sourceFilePath === targetFilePath) {
+              console.log(sourceFilePath === targetFilePath, "src=trgt");
               setTargetData(newData);
             } else if (sourceFilePath !== targetFilePath) {
               let targetdata = fs.readFileSync(targetFilePath, {
@@ -285,11 +197,13 @@ export default function App() {
   };
 
   const handleDialogConfirm = () => {
+    console.log("confirm");
     clearState();
     if (!loading) {
       dialog
         .showOpenDialog({
-          defaultPath: path.join(__dirname, "..", "src", "assets", "Resources"),
+          // defaultPath: path.join(__dirname, "src", "assets", "Resources"),
+          defaultPath: path.join(__dirname, "src", "assets", "Resources"),
         })
         .then((result) => {
           setLoading(true);
@@ -303,33 +217,7 @@ export default function App() {
           } else if (result.filePaths[0].includes("en_tn")) {
             resType = "tn";
             setResource("en_tn");
-          }
-          //  else if (result.filePaths[0].includes("en_tq")) {
-          //   resType = "tq";
-          //   setResource("en_tq");
-          // } else if (result.filePaths[0].includes("en_twl")) {
-          //   resType = "twl";
-          //   setResource("en_twl");
-          // } else if (result.filePaths[0].includes("en_tw")) {
-          //   resType = "tw";
-          //   setResource("en_tw");
-          // } else if (result.filePaths[0].includes("en_ta")) {
-          //   resType = "ta";
-          //   setResource("en_ta");
-          // } else if (result.filePaths[0].includes("en_obs-tn")) {
-          //   resType = "obs_tn";
-          //   setResource("en_obs_tn");
-          // } else if (result.filePaths[0].includes("en_obs-tq")) {
-          //   resType = "obs_tq";
-          //   setResource("en_obs_tq");
-          // } else if (result.filePaths[0].includes("en_obs-sn")) {
-          //   resType = "obs_sn";
-          //   setResource("en_obs_sn");
-          // } else if (result.filePaths[0].includes("en_obs-sq")) {
-          //   resType = "obs_sq";
-          //   setResource("en_obs_sq");
-          // }
-          else if (result.filePaths[0].includes("en_obs")) {
+          } else if (result.filePaths[0].includes("en_obs")) {
             resType = "obs";
             setResource("en_obs");
           }
@@ -352,109 +240,18 @@ export default function App() {
                 "tc-create",
                 "Output",
                 "tn",
-                result.filePaths[0].split("en_tn-release_v77/en_tn")[1]
+                result.filePaths[0].split("en_tn-release_v77")[1]
               );
               targetFilePath = fs.existsSync(fileInOutputName)
                 ? fileInOutputName
                 : result.filePaths[0];
-            }
-            //  else if (resType === "obs_sn") {
-            //   fileInOutputName = path.join(
-            //     homeDir,
-            //     "tc-create",
-            //     "Output",
-            //     "obs-sn",
-            //     result.filePaths[0].split("en_obs-sn-v5/en_obs-sn")[1]
-            //   );
-            //   targetFilePath = fs.existsSync(fileInOutputName)
-            //     ? fileInOutputName
-            //     : result.filePaths[0];
-            // } else if (resType === "obs_sq") {
-            //   fileInOutputName = path.join(
-            //     homeDir,
-            //     "tc-create",
-            //     "Output",
-            //     "obs-sq",
-            //     result.filePaths[0].split("en_obs-sq-v4/en_obs-sq")[1]
-            //   );
-            //   targetFilePath = fs.existsSync(fileInOutputName)
-            //     ? fileInOutputName
-            //     : result.filePaths[0];
-            // } else if (resType === "obs_tn") {
-            //   fileInOutputName = path.join(
-            //     homeDir,
-            //     "tc-create",
-            //     "Output",
-            //     "obs-tn",
-            //     result.filePaths[0].split("en_obs-tn-v12/en_obs-tn")[1]
-            //   );
-            //   targetFilePath = fs.existsSync(fileInOutputName)
-            //     ? fileInOutputName
-            //     : result.filePaths[0];
-            // } else if (resType === "obs_tq") {
-            //   fileInOutputName = path.join(
-            //     homeDir,
-            //     "tc-create",
-            //     "Output",
-            //     "obs-tq",
-            //     result.filePaths[0].split("en_obs-tq-v9/en_obs-tq")[1]
-            //   );
-            //   targetFilePath = fs.existsSync(fileInOutputName)
-            //     ? fileInOutputName
-            //     : result.filePaths[0];
-            // } else if (resType === "tq") {
-            //   fileInOutputName = path.join(
-            //     homeDir,
-            //     "tc-create",
-            //     "Output",
-            //     "tq",
-            //     result.filePaths[0].split("en_tq-release_v77/en_tq")[1]
-            //   );
-            //   targetFilePath = fs.existsSync(fileInOutputName)
-            //     ? fileInOutputName
-            //     : result.filePaths[0];
-            // } else if (resType === "twl") {
-            //   fileInOutputName = path.join(
-            //     homeDir,
-            //     "tc-create",
-            //     "Output",
-            //     "twl",
-            //     result.filePaths[0].split("en_twl-release_v77/en_twl")[1]
-            //   );
-            //   targetFilePath = fs.existsSync(fileInOutputName)
-            //     ? fileInOutputName
-            //     : result.filePaths[0];
-
-            // } else if (resType === "tw") {
-            //   fileInOutputName = path.join(
-            //     homeDir,
-            //     "tc-create",
-            //     "Output",
-            //     "tw",
-            //     result.filePaths[0].split("en_tw-release_v77/en_tw")[1]
-            //   );
-            //   targetFilePath = fs.existsSync(fileInOutputName)
-            //     ? fileInOutputName
-            //     : result.filePaths[0];
-            // } else if (resType === "ta") {
-            //   fileInOutputName = path.join(
-            //     homeDir,
-            //     "tc-create",
-            //     "Output",
-            //     "ta",
-            //     result.filePaths[0].split("en_ta-release_v77/en_ta")[1]
-            //   );
-            //   targetFilePath = fs.existsSync(fileInOutputName)
-            //     ? fileInOutputName
-            //     : result.filePaths[0];
-            //}
-            else if (resType === "obs") {
+            } else if (resType === "obs") {
               fileInOutputName = path.join(
                 homeDir,
                 "tc-create",
                 "Output",
                 "obs",
-                result.filePaths[0].split("en_obs-v9/en_obs")[1]
+                result.filePaths[0].split("en_obs-v9")[1]
               );
               targetFilePath = fs.existsSync(fileInOutputName)
                 ? fileInOutputName
@@ -470,7 +267,7 @@ export default function App() {
             });
             const directoryPath = path.join(
               __dirname,
-              "..",
+              // "..",
               "src",
               "assets",
               "images"
@@ -510,6 +307,7 @@ export default function App() {
     <Box
       sx={{ width: "100%", height: "100%", position: "fixed", top: 0, left: 0 }}
     >
+      {console.log(filePath, "fafdas")}
       <Grid
         container
         spacing={4}
